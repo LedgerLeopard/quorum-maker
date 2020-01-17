@@ -17,7 +17,7 @@ mv qdata/#mNode#.mv.db qdata/#mNode#.mv.db.bak
 
 sed -i "s|h2url|jdbc:h2:file:/home/node/qdata/#mNode#;AUTO_SERVER=TRUE|" qdata/tessera-migration.properties
 
-${tessera_data_migration} -storetype dir -inputpath qdata/storage/payloads -dbuser -dbpass -outputfile qdata/#mNode# -exporttype JDBC -dbconfig node/tessera-migration.properties >> /dev/null 2>&1
+${tessera_data_migration} -storetype dir -inputpath qdata/storage/payloads -dbuser -dbpass -outputfile qdata/#mNode# -exporttype JDBC -dbconfig qdata/tessera-migration.properties >> /dev/null 2>&1
 
 if [ ! -f qdata/#mNode#.mv.db ]; then
     mv qdata/#mNode#.mv.db.bak qdata/#mNode#.mv.db
@@ -42,7 +42,7 @@ sed -i "s|qdata/constellationLogs/constellation_|qdata/tesseraLogs/tessera_|" st
 sed -i "s|constellation-node.*conf|\$tessera -configfile tessera-config.json|" start_#mNode#.sh
 
 if [ ! -z "$1" ]; then
-    sed -i "s|\"peer\" : \[ \]|\"peer\" : \[ {\n      \"url\" : \"$1\"\n   } \]|" tessera-config.json     
+    sed -i "s|\"peer\" : \[ \]|\"peer\" : \[ {\n      \"url\" : \"$1\"\n   } \]|" tessera-config.json
 fi
 
 mkdir -p qdata/tesseraLogs
