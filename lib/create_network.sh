@@ -30,9 +30,6 @@ function copyScripts(){
     chmod +x ${mNode}/start.sh
 
     cp lib/master/pre_start_check_template.sh ${mNode}/node/pre_start_check.sh
-    START_CMD="start_${mNode}.sh"
-    PATTERN="s/#start_cmd#/${START_CMD}/g"
-    sed -i $PATTERN ${mNode}/node/pre_start_check.sh
     PATTERN="s/#nodename#/${mNode}/g"
     sed -i $PATTERN ${mNode}/node/pre_start_check.sh
     PATTERN="s/#netid#/${NET_ID}/g"
@@ -44,7 +41,8 @@ function copyScripts(){
     cp lib/master/nodemanager_template.sh ${mNode}/node/nodemanager.sh
     chmod +x ${mNode}/node/nodemanager.sh
 
-    cp lib/master/constellation_template.conf ${mNode}/node/${mNode}.conf
+    #cp lib/master/constellation_template.conf ${mNode}/node/${mNode}.conf
+    cp lib/master/tessera-config_template.json ${mNode}/node/tessera-config.json
 
     cp lib/master/tessera-migration.properties ${mNode}/node/qdata
 
