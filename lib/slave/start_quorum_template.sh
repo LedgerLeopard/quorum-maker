@@ -6,7 +6,7 @@ function upcheck() {
     while ${DOWN}; do
         sleep 1
         DOWN=false
-        
+
         if [ ! -S "qdata/${NODENAME}.ipc" ]; then
             echo "Node is not yet listening on ${NODENAME}.ipc" >> qdata/gethLogs/${NODENAME}.log
             DOWN=true
@@ -18,12 +18,12 @@ function upcheck() {
             echo "Node is not yet listening on http" >> qdata/gethLogs/${NODENAME}.log
             DOWN=true
         fi
-    
+
         k=$((k - 1))
         if [ ${k} -le 0 ]; then
             echo "Constellation/Tessera is taking a long time to start.  Look at the Constellation/Tessera logs for help diagnosing the problem." >> qdata/gethLogs/${NODE_NAME}.log
         fi
-       
+
         sleep 5
     done
 }
@@ -33,9 +33,9 @@ GLOBAL_ARGS="--raft --nodiscover --gcmode=archive --networkid $NETID --raftjoine
 
 tessera="java -jar /tessera/tessera-app.jar"
 
-echo "[*] Starting Constellation node" > qdata/constellationLogs/constellation_${NODENAME}.log
+echo "[*] Starting Tessera node" > qdata/tesseraLogs/tessera_${NODENAME}.log
 
-constellation-node ${NODENAME}.conf >> qdata/constellationLogs/constellation_${NODENAME}.log 2>&1 &
+$tessera -configfile tessera-config.json >> qdata/tesseraLogs/tessera_${NODENAME}.log 2>&1 &
 
 upcheck
 
