@@ -22,7 +22,7 @@ function createInitNodeScript(){
 #function to create start node script with --raft flag
 function copyScripts(){
     NET_ID=$(awk -v min=10000 -v max=99999 -v freq=1 'BEGIN{srand(); for(i=0;i<freq;i++)print int(min+rand()*(max-min+1))}')
-    
+
     cp lib/master/start_quorum_template.sh ${mNode}/node/start_${mNode}.sh
     chmod +x ${mNode}/node/start_${mNode}.sh
 
@@ -58,27 +58,17 @@ function copyScripts(){
 
 #function to generate enode
 function generateEnode(){
-    bootnode -genkey nodekey
+    bootnode --genkey=nodekey
     nodekey=$(cat nodekey)
-	bootnode -nodekey nodekey 2>enode.txt &
-	pid=$!
-	sleep 5
-	kill -9 $pid
-	wait $pid 2> /dev/null
-	re="enode:.*@"
-	enode=$(cat enode.txt)
-    
-    if [[ $enode =~ $re ]];
-    	then
-        Enode=${BASH_REMATCH[0]};
-    fi
-    
+	bootnode --nodekey=nodekey --writeaddress > enode
+	enode=$(cat enode)
+
     cp nodekey ${mNode}/node/qdata/geth/.
     cp lib/master/static-nodes_template.json ${mNode}/node/qdata/static-nodes.json
-    PATTERN="s|#eNode#|${Enode}|g"
+    PATTERN="s|#eNode#|${enode}|g"
     sed -i $PATTERN ${mNode}/node/qdata/static-nodes.json
 
-    rm enode.txt
+    rm enode
     rm nodekey
 }
 
@@ -126,8 +116,8 @@ function readParameters() {
             -n|--name)
             mNode="$2"
             shift # past argument
-            shift # past value                        
-            ;;            
+            shift # past value
+            ;;
             *)    # unknown option
             POSITIONAL+=("$1") # save it in an array for later
             shift # past argument
@@ -147,21 +137,21 @@ function readParameters() {
     NON_INTERACTIVE=true
 }
 
-function main(){    
+function main(){
 
     readParameters $@
 
     if [ -z "$NON_INTERACTIVE" ]; then
         getInputWithDefault 'Please enter node name' "" mNode $GREEN
     fi
-        
+
     cleanup
     generateKeyPair
     createInitNodeScript
     copyScripts
     generateEnode
     createAccount
-    executeInit   
+    executeInit
 }
 
 main $@
