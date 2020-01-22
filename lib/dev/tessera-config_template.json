@@ -1,0 +1,49 @@
+{
+    "type": "config",
+    "useWhiteList": false,
+    "disablePeerDiscovery": false,
+    "jdbc": {
+        "url": "jdbc:h2:file:/#mNode#/node/qdata/#mNode#;AUTO_SERVER=TRUE",
+        "autoCreateTables": false
+    },
+    "keys": {
+        "keyData": [
+            {
+                "privateKeyPath": "/home/node/keys/#mNode#.key",
+                "publicKeyPath": "/home/node/keys/#mNode#.pub"
+            }
+        ]
+    },
+    "serverConfigs": [
+        {
+            "app": "Q2T",
+            "enabled": true,
+            "communicationType": "UNIX_SOCKET",
+            "serverSocket": {
+                "type": "UNIX",
+                "path": "/home/node/qdata/#mNode#.ipc"
+            }
+        },
+        {
+            "app": "P2P",
+            "enabled": true,
+            "communicationType": "REST",
+            "hostName": "#localIp#",
+            "port": 22002,
+            "serverAddress": "http://#localIp#:22002/",
+            "sslConfig": {
+                "tls": "OFF"
+            }
+        }
+    ],
+    "peer": [
+        #peer#
+    ],
+    "alwaysSendTo": [],
+    "features": {
+        "enableRemoteKeyValidation": false
+    },
+    "encryptor": {
+        "type": "NACL"
+    }
+}
