@@ -581,7 +581,6 @@ Change log V2.4
 6. Logging added for incoming join requests
 7. Redundant node name updation steps removed
 
-
 Change log V2.3
 1. Attaching nodes to exisisting Quorum node is fully supported.
 2. Attached node can approve Join Requests. E.g. Fully migrate 7node example to Quorum Maker and add additional nodes.
