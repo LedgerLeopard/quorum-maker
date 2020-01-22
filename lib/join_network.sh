@@ -61,11 +61,6 @@ function readParameters() {
             shift # past argument
             shift # past value
             ;;
-            -t|--tessera)
-            tessera="true"
-            shift # past argument
-            shift # past value
-            ;;
             *)    # unknown option
             POSITIONAL+=("$1") # save it in an array for later
             shift # past argument

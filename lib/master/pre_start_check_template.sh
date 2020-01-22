@@ -26,7 +26,7 @@ function readParameters() {
             shift # past argument
             shift # past value
             ;;
-            -c|--constellation)
+            -t|--tessera)
             cPort="$2"
             shift # past argument
             shift # past value
