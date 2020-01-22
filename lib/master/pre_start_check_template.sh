@@ -72,7 +72,7 @@ function readInputs(){
         getInputWithDefault 'Please enter IP Address of this node' "" pCurrentIp $RED
         getInputWithDefault 'Please enter RPC Port of this node' 22000 rPort $GREEN
         getInputWithDefault 'Please enter Network Listening Port of this node' $((rPort+1)) wPort $GREEN
-        getInputWithDefault 'Please enter Constellation Port of this node' $((wPort+1)) cPort $GREEN
+        getInputWithDefault 'Please enter Tessera Port of this node' $((wPort+1)) cPort $GREEN
         getInputWithDefault 'Please enter Raft Port of this node' $((cPort+1)) raPort $PINK
         getInputWithDefault 'Please enter Node Manager Port of this node' $((raPort+1)) tgoPort $BLUE
         getInputWithDefault 'Please enter WS Port of this node' $((tgoPort+1)) wsPort $GREEN

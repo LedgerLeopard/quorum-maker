@@ -41,7 +41,6 @@ function copyScripts(){
     cp lib/master/nodemanager_template.sh ${mNode}/node/nodemanager.sh
     chmod +x ${mNode}/node/nodemanager.sh
 
-    #cp lib/master/constellation_template.conf ${mNode}/node/${mNode}.conf
     cp lib/master/tessera-config_template.json ${mNode}/node/tessera-config.json
 
     cp lib/master/tessera-migration.properties ${mNode}/node/qdata
