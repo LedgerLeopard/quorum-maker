@@ -4,7 +4,7 @@ source qm.variables
 source lib/common.sh
 
 function readParameters() {
-    
+
     POSITIONAL=()
     while [[ $# -gt 0 ]]
     do
@@ -41,7 +41,7 @@ function readParameters() {
             shift # past argument
             shift # past value
             ;;
-            -c|--constellation)
+            -t|--tessera)
             cPort="$2"
             shift # past argument
             shift # past value
@@ -61,11 +61,6 @@ function readParameters() {
             shift # past argument
             shift # past value
             ;;
-            -t|--tessera)
-            tessera="true"
-            shift # past argument
-            shift # past value
-            ;;            
             *)    # unknown option
             POSITIONAL+=("$1") # save it in an array for later
             shift # past argument
@@ -85,21 +80,21 @@ function readParameters() {
     NON_INTERACTIVE=true
 }
 
-function readInputs(){  
-    
-    if [ -z "$NON_INTERACTIVE" ]; then   
+function readInputs(){
+
+    if [ -z "$NON_INTERACTIVE" ]; then
         getInputWithDefault 'Please enter IP Address of existing node' "" pMainIp $RED
         getInputWithDefault 'Please enter Node Manager Port of existing node' "" mgoPort $YELLOW
         getInputWithDefault 'Please enter IP Address of this node' "" pCurrentIp $RED
         getInputWithDefault 'Please enter RPC Port of this node' 22000 rPort $GREEN
         getInputWithDefault 'Please enter Network Listening Port of this node' $((rPort+1)) wPort $GREEN
-        getInputWithDefault 'Please enter Constellation Port of this node' $((wPort+1)) cPort $GREEN
+        getInputWithDefault 'Please enter Tessera Port of this node' $((wPort+1)) cPort $GREEN
         getInputWithDefault 'Please enter Raft Port of this node' $((cPort+1)) raPort $PINK
         getInputWithDefault 'Please enter Node Manager Port of this node' $((raPort+1)) tgoPort $BLUE
         getInputWithDefault 'Please enter WS Port of this node' $((tgoPort+1)) wsPort $GREEN
     fi
     role="Unassigned"
-    
+
 }
 
 #function to generate keyPair for node
@@ -109,7 +104,7 @@ function readInputs(){
     echo -ne "\n" | constellation-node --generatekeys=${sNode}a 1>>/dev/null
 
     mv ${sNode}*.*  ${sNode}/node/keys/.
-    
+
  }
 
 #function to create node initialization script
@@ -120,25 +115,14 @@ function createInitNodeScript(){
 
 #function to generate enode and create static-nodes.json file
 function generateEnode(){
-    bootnode -genkey nodekey
-    nodekey=$(cat nodekey)
-    bootnode -nodekey nodekey 2>enode.txt &
-    pid=$!
-    sleep 5
-    kill -9 $pid
-    wait $pid 2> /dev/null
-    re="enode:.*@"
-    enode=$(cat enode.txt)
-    
-    if [[ $enode =~ $re ]];
-        then
-        Enode=${BASH_REMATCH[0]};
-    fi
+    bootnode --genkey=nodekey
+    bootnode --nodekey=nodekey --writeaddress > enode
+    enode=$(cat enode)
+
     disc='?discport=0&raftport='
-    Enode1=$Enode$pCurrentIp:$wPort$disc$raPort 
+    Enode1=enode://$enode@$pCurrentIp:$wPort$disc$raPort
     echo $Enode1 > ${sNode}/node/enode.txt
     cp nodekey ${sNode}/node/qdata/geth/.
-    rm enode.txt
     rm nodekey
 }
 
@@ -157,9 +141,9 @@ function createAccount(){
 #function to create start node script without --raftJoinExisting flag
 function copyScripts(){
     cp lib/slave/start_quorum_template.sh ${sNode}/node/start_${sNode}.sh
-    
+
     cp lib/slave/start_template.sh ${sNode}/start.sh
-                
+
     chmod +x ${sNode}/start.sh
     chmod +x ${sNode}/node/start_${sNode}.sh
 
@@ -167,7 +151,8 @@ function copyScripts(){
 
     cp lib/common.sh  ${sNode}/node
 
-    cp lib/slave/constellation_template.conf ${sNode}/node/${sNode}.conf
+    #cp lib/slave/constellation_template.conf ${sNode}/node/${sNode}.conf
+    cp lib/slave/tessera-config_template.json ${mNode}/node/tessera-config.json
 
     cp lib/master/tessera-migration.properties ${sNode}/node/qdata
 
@@ -192,10 +177,7 @@ function createSetupConf() {
     echo 'REGISTERED=' >> ${sNode}/setup.conf
     echo 'MODE=ACTIVE' >> ${sNode}/setup.conf
     echo 'STATE=I' >> ${sNode}/setup.conf
-    
-    if [ ! -z $tessera ]; then
-        echo 'TESSERA=true' >> ${sNode}/setup.conf        
-    fi
+    echo 'TESSERA=true' >> ${sNode}/setup.conf
 }
 
 function cleanup() {
@@ -208,14 +190,14 @@ function cleanup() {
     cp qm.variables $sNode
 }
 
-function main(){    
+function main(){
 
     readParameters $@
 
-    if [ -z "$NON_INTERACTIVE" ]; then        
+    if [ -z "$NON_INTERACTIVE" ]; then
         getInputWithDefault 'Please enter node name' "" sNode $GREEN
     fi
-    
+
     cleanup
     readInputs
     generateKeyPair
@@ -224,7 +206,7 @@ function main(){
     copyScripts
     createSetupConf
     createAccount
-    
+
 }
 
 main $@

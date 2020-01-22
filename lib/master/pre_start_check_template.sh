@@ -4,7 +4,7 @@ source qm.variables
 source node/common.sh
 
 function readParameters() {
-    
+
     POSITIONAL=()
     while [[ $# -gt 0 ]]
     do
@@ -26,7 +26,7 @@ function readParameters() {
             shift # past argument
             shift # past value
             ;;
-            -c|--constellation)
+            -t|--tessera)
             cPort="$2"
             shift # past argument
             shift # past value
@@ -46,11 +46,6 @@ function readParameters() {
             shift # past argument
             shift # past value
             ;;
-            -t|--tessera)
-            tessera="true"
-            shift # past argument
-            shift # past value
-            ;;            
             *)    # unknown option
             POSITIONAL+=("$1") # save it in an array for later
             shift # past argument
@@ -71,28 +66,20 @@ function readParameters() {
 }
 
 # read inputs to create network
-function readInputs(){   
-    
+function readInputs(){
+
     if [ -z "$NON_INTERACTIVE" ]; then
-
         getInputWithDefault 'Please enter IP Address of this node' "" pCurrentIp $RED
-        
         getInputWithDefault 'Please enter RPC Port of this node' 22000 rPort $GREEN
-        
         getInputWithDefault 'Please enter Network Listening Port of this node' $((rPort+1)) wPort $GREEN
-        
-        getInputWithDefault 'Please enter Constellation Port of this node' $((wPort+1)) cPort $GREEN
-        
+        getInputWithDefault 'Please enter Tessera Port of this node' $((wPort+1)) cPort $GREEN
         getInputWithDefault 'Please enter Raft Port of this node' $((cPort+1)) raPort $PINK
-        
         getInputWithDefault 'Please enter Node Manager Port of this node' $((raPort+1)) tgoPort $BLUE
-
         getInputWithDefault 'Please enter WS Port of this node' $((tgoPort+1)) wsPort $GREEN
-            
     fi
     role="Unassigned"
-	
-    #append values in Setup.conf file 
+
+    #append values in Setup.conf file
     echo 'CURRENT_IP='$pCurrentIp > ./setup.conf
     echo 'RPC_PORT='$rPort >> ./setup.conf
     echo 'WHISPER_PORT='$wPort >> ./setup.conf
@@ -100,7 +87,7 @@ function readInputs(){
     echo 'RAFT_PORT='$raPort >> ./setup.conf
     echo 'THIS_NODEMANAGER_PORT='$tgoPort >>  ./setup.conf
     echo 'WS_PORT='$wsPort >>  ./setup.conf
-        
+
     echo 'NETWORK_ID='$net >>  ./setup.conf
     echo 'RAFT_ID='1 >>  ./setup.conf
     echo 'NODENAME='$nodeName >> ./setup.conf
@@ -122,7 +109,7 @@ function readInputs(){
 }
 
 
-# static node to create network 
+# static node to create network
 function staticNode(){
     PATTERN1="s/#CURRENT_IP#/$pCurrentIp/g"
     PATTERN2="s/#W_PORT#/${wPort}/g"
@@ -133,20 +120,10 @@ function staticNode(){
     sed -i "$PATTERN3" node/qdata/static-nodes.json
 }
 
-function generateConstellationConf() {
-    PATTERN1="s/#CURRENT_IP#/${pCurrentIp}/g"
-    PATTERN2="s/#C_PORT#/$cPort/g"
-    PATTERN3="s/#mNode#/$nodeName/g"
-
-    sed -i "$PATTERN1" node/$nodeName.conf
-    sed -i "$PATTERN2" node/$nodeName.conf
-    sed -i "$PATTERN3" node/$nodeName.conf
-}
-
 function migrateToTessera() {
-    
+
     pushd node
-    . ./migrate_to_tessera.sh "http://${pCurrentIp}:$cPort/"  >> /dev/null 2>&1
+    . ./migrate_to_tessera.sh  >> /dev/null 2>&1
     popd
 }
 
@@ -160,13 +137,9 @@ function main(){
 
         readInputs
         staticNode
-        generateConstellationConf
-        
-        if [ ! -z $tessera ]; then
-            migrateToTessera
-            PRIVACY="TESSERA"
-        fi
-        
+        migrateToTessera
+        PRIVACY="TESSERA"
+
         publickey=$(cat node/keys/$nodeName.pub)
         uiUrl="http://localhost:"$tgoPort"/"
         echo 'PUBKEY='$publickey >> ./setup.conf
@@ -181,8 +154,8 @@ function main(){
         echo -e '\e[1;32mWhen asked, enter \e[0m'$pCurrentIp '\e[1;32mfor Existing Node IP and \e[0m'$tgoPort '\e[1;32mfor Node Manager Port\e[0m'
 
         echo -e '****************************************************************************************************************'
-        
+
     fi
-    
+
 }
 main $@

@@ -2,9 +2,9 @@
 
 source node/common.sh
 
-# Function to send post call to go endpoint joinNode 
+# Function to send post call to go endpoint joinNode
 function updateNmcAddress(){
-        
+
     url=http://${MASTER_IP}:${MAIN_NODEMANAGER_PORT}/peer
 
     response=$(curl -s -X POST \
@@ -13,7 +13,7 @@ function updateNmcAddress(){
     -d '{
        "enode-id":"'${enode}'",
        "ip-address":"'${CURRENT_IP}'"
-    }') 
+    }')
     response=$(echo $response | tr -d \")
     echo $response > input.txt
     RAFTV=$(awk -F':' '{ print $1 }' input.txt)
@@ -26,10 +26,10 @@ function updateNmcAddress(){
 
     echo 'RAFT_ID='$RAFTV >> setup.conf
     rm -f input.txt
-        
+
 }
 
-# Function to send post call to java endpoint getGenesis 
+# Function to send post call to java endpoint getGenesis
 function requestGenesis(){
     pending="Pending user response"
     rejected="Access denied"
@@ -48,8 +48,8 @@ function requestGenesis(){
     }')
 
     if [ "$response" = "$pending" ]
-    then 
-        echo "Previous request for Joining Network is still pending. Please try later. Program exiting" 
+    then
+        echo "Previous request for Joining Network is still pending. Please try later. Program exiting"
         exit
     elif [ "$response" = "$rejected" ]
     then
@@ -72,7 +72,7 @@ function requestGenesis(){
 	done < <(jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" input1.json)
 
     MASTER_CONSTELLATION_PORT=${replyMap[contstellation-port]}
-   
+
 	echo 'MASTER_CONSTELLATION_PORT='$MASTER_CONSTELLATION_PORT >>  setup.conf
 	echo 'NETWORK_ID='${replyMap[netID]} >>  setup.conf
 	echo ${replyMap[genesis]}  > node/genesis.json
@@ -80,49 +80,31 @@ function requestGenesis(){
     fi
 }
 
-function generateConstellationConf() {
-    PATTERN1="s/#CURRENT_IP#/${CURRENT_IP}/g"
-    PATTERN2="s/#C_PORT#/$CONSTELLATION_PORT/g"
-    PATTERN3="s/#mNode#/$NODENAME/g"
-    PATTERN4="s/#MASTER_IP#/$MASTER_IP/g"
-    PATTERN5="s/#MASTER_CONSTELLATION_PORT#/$MASTER_CONSTELLATION_PORT/g"
-
-    sed -i "$PATTERN1" node/$NODENAME.conf
-    sed -i "$PATTERN2" node/$NODENAME.conf
-    sed -i "$PATTERN3" node/$NODENAME.conf
-    sed -i "$PATTERN4" node/$NODENAME.conf
-    sed -i "$PATTERN5" node/$NODENAME.conf
-}
-
 # execute init script
 function executeInit(){
     PATTERN="s/#networkId#/${netvalue}/g"
     sed -i $PATTERN node/start_${NODENAME}.sh
-        
+
     ./init.sh
 }
 
 function migrateToTessera() {
-    
+
     pushd node
     . ./migrate_to_tessera.sh >> /dev/null 2>&1
     popd
 }
 
-function main(){    
+function main(){
 
     source setup.conf
-    
+
     if [ -z $NETWORK_ID ]; then
         enode=$(cat node/enode.txt)
         requestGenesis
         executeInit
         updateNmcAddress
-        generateConstellationConf
-        
-        if [ ! -z $TESSERA ]; then
-            migrateToTessera            
-        fi
+        migrateToTessera
 
         publickey=$(cat node/keys/$NODENAME.pub)
         echo 'PUBKEY='$publickey >> setup.conf
@@ -142,7 +124,7 @@ function main(){
 
         echo -e '****************************************************************************************************************'
 
-    fi    
+    fi
 
 }
 main
