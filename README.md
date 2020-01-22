@@ -11,18 +11,22 @@ Synechron's Quorum Maker is a tool that allows users to create and manage Quorum
 
 - An easy interface to create and manage the Quorum Network
 - A modern UI to monitor and manage Quorum Network
-- A Network Map Service to be used for identifying nodes and self-publishing roles.  
+- A Network Map Service to be used for identifying nodes and self-publishing roles.
 - Block and Transaction Explorer
 - Smart Contract Deployment
 - Email Notifications
 
 ## Quickstart
 
-Please refer to [Quorum Maker Wiki](https://github.com/synechron-finlabs/quorum-maker/wiki) for complete reference on using Quorum Maker. 
+Please refer to [Quorum Maker Wiki](https://github.com/LedgerLeopard/quorum-maker/wiki) for complete reference on using Quorum Maker.
 
-> For quick help, run `./setup.sh --help` 
+> For quick help, run `./setup.sh --help`
 
 ## Change Log
+Change log V2.7.0
+1. Upgrade to Tessera 0.10.2
+1. Upgrade to Quorum 2.4.0
+1. Remove Constellation
 
 Change log V2.6.2
 1. Upgraded to Tessera 0.8
@@ -47,27 +51,27 @@ Change log V2.5.2
 1. QM banner and version information on startup
 
 Change log V2.5.1
-1. Quorum version changed to V2.1.1 
+1. Quorum version changed to V2.1.1
 
 Change log V2.5
-1. Quorum version changed to V2.1.0 
+1. Quorum version changed to V2.1.0
 
 Change log V2.4
-1. Added command line flags for running Quorum Maker non-interactively 
-2. Whitelist feature added for automatically accepting join requests from whitelisted IPs 
-3. Account explorer with account creation feature added 
-4. Attach mode restart notification added to UI 
-5. Attach mode contract updation based on enode instead of nodename from setup.conf 
-6. Logging added for incoming join requests 
+1. Added command line flags for running Quorum Maker non-interactively
+2. Whitelist feature added for automatically accepting join requests from whitelisted IPs
+3. Account explorer with account creation feature added
+4. Attach mode restart notification added to UI
+5. Attach mode contract updation based on enode instead of nodename from setup.conf
+6. Logging added for incoming join requests
 7. Redundant node name updation steps removed
 
 
 Change log V2.3
 1. Attaching nodes to exisisting Quorum node is fully supported.
-2. Attached node can approve Join Requests. E.g. Fully migrate 7node example to Quorum Maker and add additional nodes. 
+2. Attached node can approve Join Requests. E.g. Fully migrate 7node example to Quorum Maker and add additional nodes.
 3. Quorum Maker can deploy Smart Contracts using inheritance.
-4. Auto attach ABI of smart contracts deployed using Truffle and Quorum Maker Smart Contract Deployer. 
-5. All solidity data types are supported on the transaction parameter view. 
-6. Enabled WS Ports for Web3 push service. 
+4. Auto attach ABI of smart contracts deployed using Truffle and Quorum Maker Smart Contract Deployer.
+5. All solidity data types are supported on the transaction parameter view.
+6. Enabled WS Ports for Web3 push service.
 7. Additional template for sending test mail on email service registration
-8. Added -d flag for start.sh of nodes to run in daemon mode. 
+8. Added -d flag for start.sh of nodes to run in daemon mode.
