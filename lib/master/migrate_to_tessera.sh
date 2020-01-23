@@ -20,6 +20,7 @@ PORT=$(grep -o "CONSTELLATION_PORT=.*" /home/setup.conf | grep -o "[0-9]*")
 
 sed -i "s/#localIp#/$LOCAL_NODE_IP/g" tessera-config.json
 sed -i "s/#port#/$PORT/g" tessera-config.json
+sed -i "s/#nodeName#/#mNode#/g" tessera-config.json
 
 mkdir -p qdata/tesseraLogs
 
