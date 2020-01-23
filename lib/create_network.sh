@@ -8,7 +8,7 @@ function generateKeyPair(){
     #echo -ne "\n" | constellation-node --generatekeys=${mNode} 1>>/dev/null
     #echo -ne "\n" | constellation-node --generatekeys=${mNode}a 1>>/dev/null
     #mv ${mNode}*.*  ${mNode}/node/keys/.
-    tessera -keygen -filename ${mNode}/node/keys/${mNode},${mNode}/node/keys/${mNode}a < /dev/null
+    java -jar /tessera/tessera-app.jar -keygen -filename ${mNode}/node/keys/${mNode},${mNode}/node/keys/${mNode}a < /dev/null
 }
 
 #function to create node initialization script
