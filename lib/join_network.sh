@@ -99,9 +99,9 @@ function readInputs(){
 
 #function to generate keyPair for node
 function generateKeyPair(){
-    java -jar /tessera/tessera-app.jar -keygen -filename ${mNode} < /dev/null 1>>/dev/null
-    java -jar /tessera/tessera-app.jar -keygen -filename ${mNode}a < /dev/null 1>>/dev/null
-    mv ${mNode}*.* ${mNode}/node/keys/.
+    java -jar /tessera/tessera-app.jar -keygen -filename ${sNode} < /dev/null 1>>/dev/null
+    java -jar /tessera/tessera-app.jar -keygen -filename ${sNode}a < /dev/null 1>>/dev/null
+    mv ${sNode}*.* ${sNode}/node/keys/.
 }
 
 #function to create node initialization script
