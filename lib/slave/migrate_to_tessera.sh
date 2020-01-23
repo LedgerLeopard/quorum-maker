@@ -16,7 +16,7 @@ if [ ! -f qdata/#mNode#.mv.db ]; then
 fi
 
 LOCAL_NODE_IP="$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')"
-PORT=$(grep -o "CONSTELLATION_PORT=.*" /home/setup.conf | grep -o "[0-9]*")
+PORT=$(grep -o "^CONSTELLATION_PORT=.*" /home/setup.conf | grep -o "[0-9]*")
 MASTER_IP=$(grep -o "MASTER_IP=.*" /home/setup.conf | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}")
 MASTER_PORT=$(grep -o "MAIN_NODEMANAGER_PORT=.*" /home/setup.conf | grep -o "[0-9]*")
 
