@@ -1,8 +1,6 @@
 #!/bin/bash
 
-tessera="java -jar /tessera/tessera-app.jar"
 tessera_data_migration="java -jar /tessera/data-migration-cli.jar"
-tessera_config_migration="java -Djavax.xml.bind.JAXBContextFactory=org.eclipse.persistence.jaxb.JAXBContextFactory -Djavax.xml.bind.context.factory=org.eclipse.persistence.jaxb.JAXBContextFactory -jar /tessera/config-migration-cli.jar"
 
 killall geth
 killall constellation-node
@@ -26,6 +24,7 @@ sed -i "s/#localIp#/$LOCAL_NODE_IP/g" tessera-config.json
 sed -i "s/#port#/$PORT/g" tessera-config.json
 sed -i "s/#masterIp#/$MASTER_IP/g" tessera-config.json
 sed -i "s/#masterPort#/$MASTER_PORT/g" tessera-config.json
+sed -i "s/#nodeName#/#mNode#/g" tessera-config.json
 
 mkdir -p qdata/tesseraLogs
 

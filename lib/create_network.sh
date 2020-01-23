@@ -5,9 +5,6 @@ source lib/common.sh
 
 #function to generate keyPair for node
 function generateKeyPair(){
-    #echo -ne "\n" | constellation-node --generatekeys=${mNode} 1>>/dev/null
-    #echo -ne "\n" | constellation-node --generatekeys=${mNode}a 1>>/dev/null
-    #mv ${mNode}*.*  ${mNode}/node/keys/.
     java -jar /tessera/tessera-app.jar -keygen -filename ${mNode} < /dev/null 1>>/dev/null
     java -jar /tessera/tessera-app.jar -keygen -filename ${mNode}a < /dev/null 1>>/dev/null
     mv ${mNode}*.* ${mNode}/node/keys/.

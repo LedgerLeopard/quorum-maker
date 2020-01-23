@@ -15,14 +15,6 @@ if [ ! -f /#mNode#/node/qdata/#mNode#.mv.db ]; then
     mv /#mNode#/node/qdata/#mNode#.mv.db.bak /#mNode#/node/qdata/#mNode#.mv.db
 fi
 
-sed -i "s|Starting Constellation node|Starting Tessera node|" node/start_#mNode#.sh
-sed -i "s|qdata/constellationLogs/constellation_|qdata/tesseraLogs/tessera_|" node/start_#mNode#.sh
-sed -i "s|constellation-node #mNode#.conf|\$tessera -configfile tessera-config.json|" node/start_#mNode#.sh
-
-if [ ! -z "$1" ]; then
-    sed -i "s|\"peer\" : \[ \]|\"peer\" : \[ {\n      \"url\" : \"$1\"\n   } \]|" node/tessera-config.json
-fi
-
 mkdir -p node/qdata/tesseraLogs
 
 echo "Completed Tessera migration. Restart node to complete take effect."

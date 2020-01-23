@@ -18,11 +18,8 @@
         {
             "app": "Q2T",
             "enabled": true,
-            "communicationType": "UNIX_SOCKET",
-            "serverSocket": {
-                "type": "UNIX",
-                "path": "/home/node/qdata/#mNode#.ipc"
-            }
+            "communicationType": "REST",
+            "serverAddress": "unix:///home/node/qdata/#mNode#.ipc"
         },
         {
             "app": "P2P",

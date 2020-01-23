@@ -3,14 +3,14 @@
     "useWhiteList": false,
     "disablePeerDiscovery": false,
     "jdbc": {
-        "url": "jdbc:h2:file:/home/node/qdata/#mNode#;AUTO_SERVER=TRUE",
+        "url": "jdbc:h2:file:/home/node/qdata/#nodeName#;AUTO_SERVER=TRUE",
         "autoCreateTables": false
     },
     "keys": {
         "keyData": [
             {
-                "privateKeyPath": "/home/node/keys/#mNode#.key",
-                "publicKeyPath": "/home/node/keys/#mNode#.pub"
+                "privateKeyPath": "/home/node/keys/#nodeName#.key",
+                "publicKeyPath": "/home/node/keys/#nodeName#.pub"
             }
         ]
     },
@@ -18,11 +18,8 @@
         {
             "app": "Q2T",
             "enabled": true,
-            "communicationType": "UNIX_SOCKET",
-            "serverSocket": {
-                "type": "UNIX",
-                "path": "/home/node/qdata/#mNode#.ipc"
-            }
+            "communicationType": "REST",
+            "serverAddress": "unix:///home/node/qdata/#nodeName#.ipc"
         },
         {
             "app": "P2P",

@@ -19,11 +19,9 @@ function generateSetupConf(){
 
 #function to generate keyPair for node
 function generateKeyPair(){
-    echo -ne "\n" | constellation-node --generatekeys=node$1 1>>/dev/null
-    echo -ne "\n" | constellation-node --generatekeys=node$1a 1>>/dev/null
-
-    mv node$1*.*  $projectName/node$1/node/keys/.
-
+    java -jar /tessera/tessera-app.jar -keygen -filename ${mNode} < /dev/null 1>>/dev/null
+    java -jar /tessera/tessera-app.jar -keygen -filename ${mNode}a < /dev/null 1>>/dev/null
+    mv ${mNode}*.* ${mNode}/node/keys/.
 }
 
 #function to create start node script with --raft flag

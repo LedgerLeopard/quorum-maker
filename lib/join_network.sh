@@ -98,14 +98,11 @@ function readInputs(){
 }
 
 #function to generate keyPair for node
- function generateKeyPair(){
-    echo -ne "\n" | constellation-node --generatekeys=${sNode} 1>>/dev/null
-
-    echo -ne "\n" | constellation-node --generatekeys=${sNode}a 1>>/dev/null
-
-    mv ${sNode}*.*  ${sNode}/node/keys/.
-
- }
+function generateKeyPair(){
+    java -jar /tessera/tessera-app.jar -keygen -filename ${mNode} < /dev/null 1>>/dev/null
+    java -jar /tessera/tessera-app.jar -keygen -filename ${mNode}a < /dev/null 1>>/dev/null
+    mv ${mNode}*.* ${mNode}/node/keys/.
+}
 
 #function to create node initialization script
 function createInitNodeScript(){

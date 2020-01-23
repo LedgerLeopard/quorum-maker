@@ -9,7 +9,7 @@ cp node/qdata/*.mv.db .
 cp node/qdata/static-nodes.json .
 rm -rf node/qdata
 mkdir -p node/qdata/gethLogs
-mkdir -p node/qdata/constellationLogs
+mkdir -p node/qdata/tesseraLogs
 
 # echo "[*] Configuring master node"
 mkdir -p node/qdata/{keystore,geth}
