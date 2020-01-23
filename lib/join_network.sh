@@ -149,7 +149,7 @@ function copyScripts(){
     cp lib/common.sh  ${sNode}/node
 
     #cp lib/slave/constellation_template.conf ${sNode}/node/${sNode}.conf
-    cp lib/slave/tessera-config_template.json ${mNode}/node/tessera-config.json
+    cp lib/slave/tessera-config_template.json ${sNode}/node/tessera-config.json
 
     cp lib/master/tessera-migration.properties ${sNode}/node/qdata
 
